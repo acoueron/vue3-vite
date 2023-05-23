@@ -1,16 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import { useCollection, useFirestore } from 'vuefire';
+import { collection } from 'firebase/firestore';
 
-defineProps({
-  msg: String,
-})
-
-const count = ref(0)
+const db = useFirestore();
+const events = useCollection(collection(db, 'events'));
+const count = ref(0);
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
+  <ul>
+    <li v-for="event in events" :key="event.id">
+      <span>{{ event.nom }}</span>
+    </li>
+  </ul>
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
     <p>
