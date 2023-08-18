@@ -1,39 +1,55 @@
 <script setup>
-import { ref } from 'vue';
+import { reactive } from 'vue';
 import { useCollection, useFirestore } from 'vuefire';
 import { collection } from 'firebase/firestore';
 
 const db = useFirestore();
 const events = useCollection(collection(db, 'events'));
-const count = ref(0);
+const event = reactive({});
+
+function selectEvent(ind) {
+  event = events[ind];
+}
 </script>
 
 <template>
-  <ul>
-    <li v-for="event in events" :key="event.id">
-      <span>{{ event.nom }}</span>
-    </li>
-  </ul>
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
+  <div class="common-layout">
+    <el-container>
+      <el-header>
+        <h2>Agenda</h2>
+      </el-header>
+      <el-main>
+        <el-row :gutter="20">
+          <el-col :span="18">
+            <el-table
+              :data="events"
+              style="width: 100%"
+              :onclick="selectEvent(1)"
+            >
+              <el-table-column label="Date" width="180">
+                <template #default="scope">{{
+                  scope.row.date.toDate().toLocaleString()
+                }}</template>
+              </el-table-column>
+              <el-table-column prop="nom" label="Nom" width="120" />
+              <el-table-column
+                prop="description"
+                label="Description"
+                width="180"
+              />
+            </el-table>
+          </el-col>
+          <el-col :span="6">
+            <el-form :model="event">
+              <el-form-item label="Activity name">
+                <el-input v-model="event.nom" />
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
   </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Install
-    <a href="https://github.com/vuejs/language-tools" target="_blank">Volar</a>
-    in your IDE for a better DX
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
 
 <style scoped>

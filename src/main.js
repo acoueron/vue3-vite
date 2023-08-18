@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { createApp } from 'vue';
 import { VueFire, VueFireAuth } from 'vuefire';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 import './style.css';
 import App from './App.vue';
 
@@ -15,6 +17,8 @@ const firebaseApp = initializeApp({
 });
 
 const app = createApp(App);
+
+app.use(ElementPlus);
 
 app.use(VueFire, {
   // imported above but could also just be created here
